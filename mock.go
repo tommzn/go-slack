@@ -3,7 +3,6 @@ package slack
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 
@@ -27,8 +26,6 @@ func newHttpMock(shouldReturnWithError bool, assert *assert.Assertions) *httpMoc
 
 // Do will look for expected headers in passed request and returns with predefined response payload.
 func (mock *httpMock) Do(req *http.Request) (*http.Response, error) {
-
-	fmt.Printf("H: %+v\n", req.Header)
 	expectedHeaders := []string{"Authorization", "Content-Type"}
 	for _, header := range expectedHeaders {
 		if _, ok := req.Header[header]; !ok {

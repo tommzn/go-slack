@@ -104,9 +104,8 @@ func evalResponse(response *http.Response, err error) error {
 	if !postMessageResponse.Ok {
 		if postMessageResponse.Error != nil {
 			return errors.New(*postMessageResponse.Error)
-		} else {
-			return errors.New("An error has occurred!")
 		}
+		return errors.New("An error has occurred!")
 	}
 	return nil
 }
