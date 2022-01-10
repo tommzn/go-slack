@@ -17,7 +17,7 @@ type httpMock struct {
 }
 
 // NewHttpMock returns a new nock for HTTP requests. It have to be added as Transport during creating a *http.Client.
-// shouldReturnWithError can be used to return succesful or a response error.
+// shouldReturnWithError can be used to return successful or a response error.
 func newHttpMock(shouldReturnWithError bool, assert *assert.Assertions) *httpMock {
 	return &httpMock{
 		shouldReturnWithError: shouldReturnWithError,
@@ -48,7 +48,7 @@ func (mock *httpMock) RoundTrip(req *http.Request) (*http.Response, error) {
 func (mock *httpMock) createResponse() (*http.Response, error) {
 	w := httptest.NewRecorder()
 	if mock.shouldReturnWithError {
-		msg := "An error has occured!"
+		msg := "An error has occurred!"
 		json.NewEncoder(w).Encode(postMessageResponse{Ok: false, Error: &msg})
 	} else {
 		json.NewEncoder(w).Encode(postMessageResponse{Ok: true})

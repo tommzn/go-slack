@@ -33,7 +33,7 @@ func NewFromConfig(conf config.Config, secretsManager secrets.SecretsManager) *C
 	}
 }
 
-// WithChannel assign passed channel id to client. Usefull if most messages should be send to one channel.
+// WithChannel assign passed channel id to client. Useful if most messages should be send to one channel.
 func (client *Client) WithChannel(channel string) *Client {
 	client.channel = &channel
 	return client
@@ -105,7 +105,7 @@ func evalResponse(response *http.Response, err error) error {
 		if postMessageResponse.Error != nil {
 			return errors.New(*postMessageResponse.Error)
 		} else {
-			return errors.New("An error has occured!")
+			return errors.New("An error has occurred!")
 		}
 	}
 	return nil
