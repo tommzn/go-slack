@@ -20,7 +20,7 @@ import {
 func main() {
 
     client := slack.New()
-    header := "Greeting!"
+    header := "Greetings!"
     channel := "<ChannelId>"
 
     // Send a message with header to a channel
