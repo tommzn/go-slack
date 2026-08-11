@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -32,6 +33,10 @@ func (mock *httpMock) Do(req *http.Request) (*http.Response, error) {
 			return nil, errors.New("Missing header: " + header)
 		}
 	}
+	// Validate header values
+	mock.assert.Equal("application/json", req.Header.Get("Content-Type"), "Content-Type must be application/json")
+	authHeader := req.Header.Get("Authorization")
+	mock.assert.True(strings.HasPrefix(authHeader, "Bearer "), "Authorization must use RFC 6750 'Bearer <token>' format (no colon), got: "+authHeader)
 	return mock.createResponse()
 }
 
