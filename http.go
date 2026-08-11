@@ -28,7 +28,7 @@ func (slackReq *slackRequests) RoundTrip(r *http.Request) (*http.Response, error
 		return nil, err
 	}
 	r.Header.Add("Authorization", "Bearer: "+*tokem)
-	r.Header.Add("Content-Type", "application/jso")
+	r.Header.Add("Content-Type", "application/json")
 	return slackReq.roundTripper.RoundTrip(r)
 }
 
