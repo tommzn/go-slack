@@ -81,7 +81,7 @@ func (suite *ClientTestSuite) TestTokenNotFound() {
 
 	client := New()
 	err := client.SendToChannel("Hello!", "ChannelId", nil)
-	suite.NotNil(err)
+	suite.Require().Error(err)
 	suite.Contains(err.Error(), "auth token")
 }
 
@@ -103,7 +103,7 @@ func (suite *ClientTestSuite) TestEvalResponseOkFalseNoErrorField() {
 	}
 
 	err := client.SendToChannel("Hello!", "ChannelId", nil)
-	suite.NotNil(err)
+	suite.Require().Error(err)
 	suite.Contains(err.Error(), "error has occurred")
 }
 
@@ -125,18 +125,24 @@ func (suite *ClientTestSuite) clientWithConfigForTest() *Client {
 	return client
 }
 
-// forwardToServer is a simple RoundTripper that redirects requests to a test server URL.
+// forwardToServer is a simple RoundTripper that redirects requests to a test server URL
+// without mutating the original request (honoring the http.RoundTripper contract).
 type forwardToServer struct {
 	base string
 }
 
 func (f *forwardToServer) RoundTrip(r *http.Request) (*http.Response, error) {
-	r.URL.Scheme = "http"
-	r.URL.Host = r.Host
-	req, err := http.NewRequest(r.Method, f.base+r.URL.Path, r.Body)
+	// Build a new target URL from the test-server base; preserve path and query string
+	// without touching r.URL so the original request is not mutated.
+	target := f.base + r.URL.Path
+	if r.URL.RawQuery != "" {
+		target += "?" + r.URL.RawQuery
+	}
+	req, err := http.NewRequest(r.Method, target, r.Body)
 	if err != nil {
 		return nil, err
 	}
-	req.Header = r.Header
+	// Clone the header map so the new request owns its own copy.
+	req.Header = r.Header.Clone()
 	return http.DefaultTransport.RoundTrip(req)
 }
