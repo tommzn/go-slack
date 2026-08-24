@@ -106,7 +106,7 @@ func evalResponse(response *http.Response, err error) error {
 		if postMessageResponse.Error != nil {
 			return errors.New(*postMessageResponse.Error)
 		}
-		return errors.New("slack api reported an unspecified error")
+		return errors.New("slack API reported an unspecified error")
 	}
 	return nil
 }

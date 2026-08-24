@@ -22,7 +22,7 @@ func TestClientTestSuite(t *testing.T) {
 
 func (suite *ClientTestSuite) SetupTest() {
 	suite.tokenKey = "AuthToken"
-	// Set SLACK_TOKEN for the current test; testify restores it after each test.
+	// Set SLACK_TOKEN for the current test; Go's testing cleanup (via t.Setenv) restores it after each test.
 	suite.T().Setenv(SLACK_TOKEN, suite.tokenKey)
 }
 
