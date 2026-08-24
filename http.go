@@ -41,5 +41,5 @@ func (slackReq *slackRequests) token() (*string, error) {
 	if token, ok := os.LookupEnv(SLACK_TOKEN); ok {
 		return &token, nil
 	}
-	return nil, errors.New("Unable to obtain auth token for Slack api request.")
+	return nil, errors.New("unable to obtain auth token for Slack API request")
 }

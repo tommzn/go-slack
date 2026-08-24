@@ -39,11 +39,12 @@ func (client *Client) WithChannel(channel string) *Client {
 	return client
 }
 
-// Send will send passed message to previous assigned channel. Passed message is send as section block in plain text.
-// Header is optional and will be send as a header block if passed.
+// Send will send passed message to the previously assigned channel. The
+// message is sent as a section block in plain text. The header is optional and
+// will be sent as a header block if provided.
 func (client *Client) Send(message string, header *string) error {
 	if client.channel == nil {
-		return errors.New("No channel assigned!")
+		return errors.New("no channel assigned")
 	}
 	return client.SendToChannel(message, *client.channel, header)
 }
@@ -105,7 +106,7 @@ func evalResponse(response *http.Response, err error) error {
 		if postMessageResponse.Error != nil {
 			return errors.New(*postMessageResponse.Error)
 		}
-		return errors.New("An error has occurred!")
+		return errors.New("slack API reported an unspecified error")
 	}
 	return nil
 }

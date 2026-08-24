@@ -20,17 +20,10 @@ func TestClientTestSuite(t *testing.T) {
 	suite.Run(t, new(ClientTestSuite))
 }
 
-func (suite *ClientTestSuite) SetupSuite() {
+func (suite *ClientTestSuite) SetupTest() {
 	suite.tokenKey = "AuthToken"
-	if _, ok := os.LookupEnv(SLACK_TOKEN); !ok {
-		os.Setenv(SLACK_TOKEN, suite.tokenKey)
-	}
-}
-
-func (suite *ClientTestSuite) TearDownSuite() {
-	if token, ok := os.LookupEnv(SLACK_TOKEN); ok && token == suite.tokenKey {
-		os.Unsetenv(SLACK_TOKEN)
-	}
+	// Set SLACK_TOKEN for the current test; Go's testing cleanup (via t.Setenv) restores it after each test.
+	suite.T().Setenv(SLACK_TOKEN, suite.tokenKey)
 }
 
 func (suite *ClientTestSuite) TestSendMessage() {
@@ -71,13 +64,9 @@ func (suite *ClientTestSuite) TestWithChannelFromConfig() {
 // and no secrets manager is configured.
 func (suite *ClientTestSuite) TestTokenNotFound() {
 
-	prev, hadToken := os.LookupEnv(SLACK_TOKEN)
+	// SetupTest already sets SLACK_TOKEN via t.Setenv; explicitly unsetting here
+	// only affects this test — t.Setenv's cleanup restores the previous value.
 	os.Unsetenv(SLACK_TOKEN)
-	suite.T().Cleanup(func() {
-		if hadToken {
-			os.Setenv(SLACK_TOKEN, prev)
-		}
-	})
 
 	client := New()
 	err := client.SendToChannel("Hello!", "ChannelId", nil)
@@ -92,7 +81,7 @@ func (suite *ClientTestSuite) TestEvalResponseOkFalseNoErrorField() {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(postMessageResponse{Ok: false}) // Error field absent
+		_ = json.NewEncoder(w).Encode(postMessageResponse{Ok: false}) // Error field absent
 	}))
 	defer ts.Close()
 
@@ -104,7 +93,37 @@ func (suite *ClientTestSuite) TestEvalResponseOkFalseNoErrorField() {
 
 	err := client.SendToChannel("Hello!", "ChannelId", nil)
 	suite.Require().Error(err)
-	suite.Contains(err.Error(), "error has occurred")
+	suite.Contains(err.Error(), "unspecified error")
+}
+
+// TestEvalResponseDecodeError exercises the evalResponse path where the Slack
+// API returns a body that is not valid JSON.
+func (suite *ClientTestSuite) TestEvalResponseDecodeError() {
+
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte("not-json"))
+	}))
+	defer ts.Close()
+
+	client := New()
+	client.httpClient = &http.Client{
+		Transport: newRoundTripper(nil, &forwardToServer{base: ts.URL}),
+	}
+
+	err := client.SendToChannel("Hello!", "ChannelId", nil)
+	suite.Require().Error(err)
+}
+
+// TestSendNoChannelAssigned exercises the Send() guard when no channel has
+// been configured on the client.
+func (suite *ClientTestSuite) TestSendNoChannelAssigned() {
+
+	client := New()
+	err := client.Send("Hello!", nil)
+	suite.Require().Error(err)
+	suite.Contains(err.Error(), "no channel assigned")
 }
 
 func (suite *ClientTestSuite) clientForTest(shouldReturnWithError bool) *Client {
