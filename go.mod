@@ -4,8 +4,8 @@ go 1.25.0
 
 require (
 	github.com/stretchr/testify v1.12.1
-	github.com/tommzn/go-config v1.6.1
-	github.com/tommzn/go-secrets v1.1.10
+	github.com/tommzn/go-config v1.6.2
+	github.com/tommzn/go-secrets v1.1.11
 )
 
 require (
