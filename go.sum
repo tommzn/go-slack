@@ -8,10 +8,10 @@ github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0t
 github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/stretchr/testify v1.12.1 h1:EuwCh5fleGS7H32xRwO3wRGT7DxrDhLAT6FF8MpWDWE=
 github.com/stretchr/testify v1.12.1/go.mod h1:MDEgiDPPsNp5cuIrHPPCyornHKgEVbtFUmoNlxoYthg=
-github.com/tommzn/go-config v1.6.1 h1:c0umyrCzhhWN9RgsLS3ylK1seardhQVekn0E4GICCuU=
-github.com/tommzn/go-config v1.6.1/go.mod h1:+aFEUJSNTbHFPFelzHq4k94WYnZvA9FpFY160SBaZ60=
-github.com/tommzn/go-secrets v1.1.10 h1:mDRoemCtkbg83zZVgPF7SiXQTTMr7RW5CJ2hSHq4/8o=
-github.com/tommzn/go-secrets v1.1.10/go.mod h1:EMUci2rPXo6Phcc59pOyx5DiP1HTxpLwKJnMlHqjFLg=
+github.com/tommzn/go-config v1.6.2 h1:yvQHfRp08ui7NzpGkUiEE7dUGywwC8COUDkOvOAeLdc=
+github.com/tommzn/go-config v1.6.2/go.mod h1:xVxlKwhK7h5J3lMy9RkUp+lnlmx2SWtIIvrQTAog9kE=
+github.com/tommzn/go-secrets v1.1.11 h1:vIZrH+OCtyYvr6Z9cfj5J0Nw0Dm8wI0gSgNkK+BKqEE=
+github.com/tommzn/go-secrets v1.1.11/go.mod h1:H2fu1v8FpbACUTnEe12KF3O7skkyfECTpChhYwQrZuI=
 go.yaml.in/yaml/v3 v3.0.5 h1:N6y/pJk8buWs9NY5ERU2HSMfm+IuD/OtfdAnq6kESPw=
 go.yaml.in/yaml/v3 v3.0.5/go.mod h1:HVTZu1O7/Vkt2N+BFy8Zza+lnLsABggaTM2ZpNIGuKg=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
